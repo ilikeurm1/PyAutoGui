@@ -6,8 +6,8 @@ def Green_clicky(x, y, c):
     while True:
         pixel_color = pyautogui.pixel(x, y)
         if pixel_color == c:
-            start = time()
             pyautogui.click(x, y)
+            start = time()
             return start
 
 def Clicker(x, y, c):

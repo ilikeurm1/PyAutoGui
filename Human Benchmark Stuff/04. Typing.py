@@ -41,15 +41,15 @@ if letters_elements:
     for element in letters_elements:
         characters.append(element.text)
 
-    # Join the characters list into a string
-    words_to_type = ' '.join(characters)
+    # # Join the characters list into a string
+    # words_to_type = ' '.join(characters)
 
     # Print the words
-    print("Words to type:", words_to_type)
+    print("Words to type:", characters)
 
     # Simulate typing using PyAutoGUI
     time.sleep(10)  # Adding a delay before typing starts (adjust as needed)
-    pyautogui.write(words_to_type, interval = 0)  # Typing out the words
+    pyautogui.press(characters, interval = 0)  # Typing out the words
 
 else:
     print("No elements with class 'letters' found.")
