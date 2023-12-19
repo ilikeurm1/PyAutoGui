@@ -1,143 +1,83 @@
 import pyautogui
-import pytesseract
-from PIL import ImageOps
-import re
 from time import sleep
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# Define driver path
+chrome_driver_path = r"C:\Users\School account\Downloads\Other\Python things\Chrome webdriver\chromedriver-win64\chromedriver.exe"
+
+# Initialize the Chrome WebDriver
+driver = webdriver.Chrome()
+
+# URL of the website
+url = 'https://humanbenchmark.com/tests/number-memory'  # Replace this with the URL of the website you want to scrape
+
+service = Service(chrome_driver_path)
+
+# Set up the Chrome webdriver
+driver = webdriver.Chrome(None, service)
+
+# Open the webpage
+driver.get(url)
 
 # init
-run_amount = 10
-counter = 0
-timer = 0
-found = []
+run_amount = 50 # amount of times to run (edit to liking)
+ran = 0
 
-# Define the coordinates for the region to search for the number
-start_x, start_y = 207, 529
-end_x, end_y = 1877, 670
+# wait to run program
+pyautogui.alert("""1. Wait for the page to load
+2. Decline/Accept the cookies and put the browser into fullscreen (important for larger run amounts)
+3. REMOVE ALL ADS!!!! VERY IMPORTANT! (otherwise it'll error trying to click the buttons)
+4. Click ok to start the program
+5. Watch it go to work!
+""", 'INSTRUCTIONS!!', 'I have read and agree.')
 
-# click start button
-pyautogui.click(980, 855)
 
-while counter != run_amount:
-    sleep(.5)
-    # Function to preprocess the image by applying a threshold
-    def preprocess_image(img, threshold_value):
-        # Convert the image to grayscale
-        grayscale_img = ImageOps.grayscale(img)
-        # Apply thresholding to enhance number recognition
-        thresholded_img = ImageOps.invert(grayscale_img.point(lambda p: p > threshold_value and 255))
-        return thresholded_img
+# find the start button
+Start = driver.find_element(By.XPATH, '//button[text()="Start"]')
+Start.click()
 
-    # Set threshold value for image preprocessing
-    threshold_value = 150  # Adjust this threshold value as needed
-
-    # Get the screenshot of the defined region
-    screenshot = pyautogui.screenshot(region=(start_x, start_y, end_x - start_x, end_y - start_y))
-
-    # Convert the screenshot to grayscale and apply thresholding
-    preprocessed_screenshot = preprocess_image(screenshot, threshold_value)
-
-    # show preprocessed image
-    preprocessed_screenshot.show()
-
-    # Perform OCR on the preprocessed image
-    text = pytesseract.image_to_string(preprocessed_screenshot)
-
-    # Use regular expression to find numbers in the text
-    numbers_found = re.findall(r'\d+', text)
-
-    # Print the numbers found
-    if numbers_found:
-        number = numbers_found[0]
-        print('THIS IS THE NUMBER THAT I FOUND:')
-        print(number)
-
-        # add each single number to a list
-        for x in number:
-            found.append(str(x))
-
-        print("Numbers found:")
-        print(found)
-        sleep(len(found) + 1)
-        pyautogui.typewrite(found, interval=0.1)
-        sleep(1)
-        pyautogui.press('enter', presses=2, interval=0.5)
-
-        # clear lists for new number
-        numbers_found.clear()
-        found.clear()
-
-        # add to counter to make it end eventually
-        counter += 1
-    else:
-        print("No numbers found in the specified region.")
-        break
+while ran <= run_amount:
+    number = None
+    submit_button = None
+    next_button = None
     
+    # finding number
+    while not number:
+        try:
+            number = driver.find_element(By.CLASS_NAME, 'big-number').text
+        except NoSuchElementException:
+            sleep(0.1)
 
+    # find the sumbit button --> timer
+    while not submit_button:
+        try:
+            submit_button = driver.find_element(By.XPATH, '//button[text()="Submit"]')
+        except NoSuchElementException:
+            sleep(0.1)
 
+    # write the number
+    pyautogui.write(number)
+    print(f'Entered number: {number}')
+    print(f'This number is {len(number)} digits')
+    print()
 
+    # Submit it
+    submit_button.click()
+    
+    # find the next button
+    while not next_button:
+        try:
+            next_button = driver.find_element(By.XPATH, '//button[text()="NEXT"]')
+        except NoSuchElementException:
+            sleep(0.1)
 
+    # Click next button
+    next_button.click()
+    
+    ran += 1
 
-# ================================== UNDER NEATH THIS LINE THERE IS TESTING CODE ==================================
-
-
-
-
-# sleep(.5)
-
-# # Function to preprocess the image by applying a threshold
-# def preprocess_image(img, threshold_value):
-#     # Convert the image to grayscale
-#     grayscale_img = ImageOps.grayscale(img)
-#     # Apply thresholding to enhance number recognition
-#     thresholded_img = ImageOps.invert(grayscale_img.point(lambda p: p > threshold_value and 255))
-#     return thresholded_img
-
-# # Set threshold value for image preprocessing
-# threshold_value = 150  # Adjust this threshold value as needed
-
-# # Get the screenshot of the defined region
-# screenshot = pyautogui.screenshot(region=(start_x, start_y, end_x - start_x, end_y - start_y))
-
-# # Convert the screenshot to grayscale and apply thresholding
-# preprocessed_screenshot = preprocess_image(screenshot, threshold_value)
-
-# # show preprocessed image
-# preprocessed_screenshot.show()
-
-# # Perform OCR on the preprocessed image
-# text = pytesseract.image_to_string(preprocessed_screenshot)
-
-# print("Text extracted after thresholding:")
-# print(text)
-
-# # Use regular expression to find numbers in the text
-# numbers_found = re.findall(r'\d+', text)
-
-# # Print the numbers found
-# if numbers_found:
-#     number = numbers_found[0]
-#     print('THIS IS THE NUMBER THAT I FOUND:')
-#     print(number)
-
-#     # add each single number to a list
-#     for x in number:
-#         found.append(str(x))
-
-#     print("Numbers found:")
-#     print(found)
-#     sleep(len(found) + 1)
-#     pyautogui.typewrite(found, interval=0.1)
-#     sleep(1)
-#     pyautogui.press('enter', presses=2, interval=0.5)
-
-#     # clear lists for new number
-#     numbers_found.clear()
-#     found.clear()
-
-#     # add to counter to make it end eventually
-#     counter += 1
-# else:
-#     print("No numbers found in the specified region.")
-#     # break
+pyautogui.alert('Click ok to close browser!')
+driver.quit()
