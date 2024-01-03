@@ -1,5 +1,5 @@
 import pyautogui
-from time import sleep, time
+from time import sleep
 
 def Clicker(x, y, c):
     while True:
@@ -7,15 +7,11 @@ def Clicker(x, y, c):
         if pixel_color == c:
             pyautogui.click(x, y)
             break
-    start = time()
     # Wait for the pixel to turn green before the second click
     
     # click again to restart
     pyautogui.click(x, y)
     
-    end = time()
-    print(f"Click performed after: {round(100 * (end - start), 2)} ms.")
-
 
 # Set your coordinates (x, y) and the expected color in RGB format (R, G, B)
 x, y, c = 980, 270, (75, 219, 106)
