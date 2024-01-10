@@ -1,54 +1,81 @@
-# import pyautogui
-# from time import sleep as s
+import pyautogui
+from time import sleep as s
 
-# def draw_square(t, r, b, l):
-#     # Mouse down before dragging
-#     pyautogui.moveTo(t)
-#     pyautogui.mouseDown()
+points = []
 
-#     # Drag to all points in square in order
-#     pyautogui.moveTo(r)
-#     pyautogui.moveTo(b)
-#     pyautogui.moveTo(l)
-#     pyautogui.moveTo(t)
+def draw_square(t, r, b, l):
+    # Mouse down before dragging
+    pyautogui.moveTo(t)
+    pyautogui.mouseDown()
 
-#     # Mouse up after completing the square
-#     pyautogui.mouseUp()
+    # Drag to all points in square in order
+    pyautogui.moveTo(r)
+    pyautogui.moveTo(b)
+    pyautogui.moveTo(l)
+    pyautogui.moveTo(t)
 
-# # define the center of your circle (this might be a bit off to the left as im using opera gx with a sidebar)
-# size = pyautogui.size()
+    # Mouse up after completing the square
+    pyautogui.mouseUp()
 
-# if size[1] == 1080:
-#     # 1080p monitors
-#     Center = (991, 550)
-#     Pass = True
-#     r = 350
-# elif size[1] == 1440:
-#     # 1440p monitors
-#     Center = (1300, 726)
-#     Pass = True
-#     r = 550
-# else:
-#     pyautogui.alert('Sorry, i dont support this resolution, please change you moonitor to: 1920x1080p or 2560x1440p', 'ERROR', 'I understand')
-#     Pass = False
+# define the center of your circle (this might be a bit off to the left as im using opera gx with a sidebar)
+size = pyautogui.size()
 
-# if Pass:
-#     # define x and y and r
-#     x = Center[0]
-#     y = Center[1]
+browser = pyautogui.confirm('What browser are you using?', 'Browser', ['Opera gx', 'Chrome', 'None of above'])
 
-#     # define points in "square"
-#     top = (x, y - r)
-#     bottom = (x, y + r)
-#     right = (x + r, y)
-#     left = (x - r, y)
+if size[1] == 1080:
+    # 1080p monitors
+    r = 350
+    if browser == 'Opera gx':
+        Center = (991, 550)
+        Pass = True
+    elif browser == 'Chrome':
+        Center = (960, 565)
+        Pass = True
+    else:
+        pyautogui.alert("Sorry, i don't support this browser yet, please use one listed in the list!", 'Browser Support Error', 'I understand')
+        Pass = False
 
-#     s(4)
+elif size[1] == 1440:
+    # 1440p monitors
+    r = 550
+    if browser == 'Opera gx':
+        Center = (1300, 726)  
+        Pass = True
+    elif browser == 'Chrome':
+        pyautogui.alert('This is a temporary error, i guess i might be able to guess the coords of of the change in coords in 1080p but im too lazy to do that rn.')
+    else:
+        pyautogui.alert("Sorry, i don't support this browser yet, please use one listed in the list!", 'Browser Support Error', 'I understand')
+        Pass = False
+else:
+    pyautogui.alert('Sorry, i dont support this resolution, please change you moonitor to: 1920x1080p or 2560x1440p', 'Resolution Error', 'I understand')
+    Pass = False
 
-#     # draw circle
-#     draw_square(top, right, bottom, left)
-# else:
-#     pass
+if Pass:
+    # define x and y and r
+    x = Center[0]
+    y = Center[1]
+
+    # define points in "circle" (square)
+    top = (x, y - r)
+    right = (x + r, y)
+    bottom = (x, y + r)
+    left = (x - r, y)
+
+    # points.append(top)
+    # points.append(right)
+    # points.append(bottom)
+    # points.append(left)
+
+    # for coord in points:
+    #     print(coord) # print out what the coords
+    
+    s(4)
+
+    # draw circle
+    draw_square(top, right, bottom, left)
+    pyautogui.moveTo(Center)
+else:
+    pass
 
 
 """
@@ -57,48 +84,68 @@
 ===========================================================================================================================================================================================
 """
 
-import pyautogui
-import math
-from time import sleep as s
+# import pyautogui
+# import math
+# from time import sleep as s
 
-# define the center of your circle (this might be a bit off to the left as im using opera gx with a sidebar)
-size = pyautogui.size()
+# # define the center of your circle (this might be a bit off to the left as im using opera gx with a sidebar)
+# size = pyautogui.size()
 
-if size[1] == 1080:
-    # 1080p monitors
-    Center = (991, 550)
-    Pass = True
-    r = 350
-elif size[1] == 1440:
-    # 1440p monitors
-    Center = (1300, 726)
-    Pass = True
-    r = 550
-else:
-    pyautogui.alert('Sorry, i dont support this resolution, please change you moonitor to: 1920x1080p or 2560x1440p', 'ERROR', 'I understand')
-    Pass = False
+# browser = pyautogui.confirm('What browser are you using?', 'Browser', ['Opera gx', 'Chrome', 'Not supported browser'])
 
-if Pass:
-    # define x and y and r
-    x = Center[0]
-    y = Center[1]
+# if size[1] == 1080:
+#     # 1080p monitors
+#     r = 350
+#     if browser == 'Opera gx':
+#         Center = (991, 551)
+#         Pass = True
+#     elif browser == 'Chrome':
+#         Center = (961, 566)
+#         Pass = True
+#     else:
+#         pyautogui.alert("Sorry, i don't support this browser yet, please use one listed in the list!", 'Browser Support Error', 'I understand')
+#         Pass = False
 
-    # Calculate the points of the circle using trigonometry
-    points = []
-    for angle in range(-90, 271, 90):  # Increase step for more or fewer points
-        point_x = x + int(r * math.cos(math.radians(angle)))
-        point_y = y + int(r * math.sin(math.radians(angle)))
-        points.append((point_x, point_y))
+# elif size[1] == 1440:
+#     # 1440p monitors
+#     r = 550
+#     if browser == 'Opera gx':
+#         Center = (1300, 726)  
+#         Pass = True
+#     elif browser == 'Chrome':
+#         pyautogui.alert('This is a temporary error, i guess i might be able to guess the coords of of the change in coords in 1080p but im too lazy to do that rn.')
+#     else:
+#         pyautogui.alert("Sorry, i don't support this browser yet, please use one listed in the list!", 'Browser Support Error', 'I understand')
+#         Pass = False
+# else:
+#     pyautogui.alert('Sorry, i dont support this resolution, please change you moonitor to: 1920x1080p or 2560x1440p', 'Resolution Error', 'I understand')
+#     Pass = False
 
-    s(4)
+# if Pass:
+#     # define x and y and r
+#     x = Center[0]
+#     y = Center[1]
 
-    # Move the mouse and draw the circle
-    pyautogui.moveTo(points[0])
-    pyautogui.mouseDown()
+#     # Calculate the points of the circle using trigonometry
+#     points = []
+#     for angle in range(0, 361, 90):  # Increase step for more or fewer points
+#         point_x = x + int(r * math.cos(math.radians(angle)))
+#         point_y = y + int(r * math.sin(math.radians(angle)))
+#         points.append((point_x, point_y))
 
-    for point in points:
-        pyautogui.moveTo(point)
+#     points.reverse() # Counter clockwise 
+#     for coord in points:
+#         print(coord) # print out what coords ill move to in order
+#     s(4)
 
-    pyautogui.mouseUp()
-else:
-    pass
+#     # Move the mouse and draw the circle
+#     pyautogui.moveTo(points[0])
+#     pyautogui.mouseDown()
+
+#     for point in points:
+#         pyautogui.moveTo(point)
+
+#     pyautogui.mouseUp()
+#     pyautogui.moveTo(Center)
+# else:
+#     pass
