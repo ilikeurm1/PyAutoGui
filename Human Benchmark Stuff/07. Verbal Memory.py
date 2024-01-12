@@ -1,22 +1,15 @@
 import pyautogui
 from time import sleep
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
-# Define driver path
-chrome_driver_path = r"C:\Users\School account\Downloads\Other\Python things\Chrome webdriver\chromedriver-win64\chromedriver.exe"
-
-# Initialize the Chrome WebDriver
-driver = webdriver.Chrome()
+# Set up the Chrome webdriver
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
 # URL of the website
 url = 'https://humanbenchmark.com/tests/verbal-memory'  # Replace this with the URL of the website you want to scrape
-
-service = Service(chrome_driver_path)
-
-# Set up the Chrome webdriver
-driver = webdriver.Chrome(None, service)
 
 # Open the webpage
 driver.get(url)
@@ -34,7 +27,7 @@ pyautogui.alert("""1. Wait for the page to load
 """, 'INSTRUCTIONS!!', 'I have read and agree.')
 
 
-# find the 
+# find the start button
 Start = driver.find_element(By.XPATH, '//button[text()="Start"]')
 Start.click()
 sleep(.2)

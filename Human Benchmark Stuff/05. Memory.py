@@ -1,19 +1,12 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-import keyboard
 import time
 import pyautogui
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
-# Start button
-start_button = 'p'
-
-# Define driver path
-chrome_driver_path = r"C:\Users\School account\Downloads\Other\Python things\Chrome webdriver\chromedriver-win64\chromedriver.exe"
-
-# Initialize the Chrome WebDriver
-service = Service(chrome_driver_path)
-driver = webdriver.Chrome(None, service)
+# Set up the Chrome webdriver
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
 # URL of the website
 url = 'https://humanbenchmark.com/tests/memory'  # Replace this with the URL of the website you want to scrape
@@ -40,10 +33,6 @@ while ran != run_amount:
         element.click()
 
     time.sleep(1)
-        
-    # break out of loop
-    if keyboard.is_pressed(start_button):
-        break
 
     num_squares += 1
     ran += 1

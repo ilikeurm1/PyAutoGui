@@ -4,20 +4,13 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
-
-# Define driver path
-chrome_driver_path = r"C:\Users\School account\Downloads\Other\Python things\Chrome webdriver\chromedriver-win64\chromedriver.exe"
-
-# Initialize the Chrome WebDriver
-driver = webdriver.Chrome()
+from webdriver_manager.chrome import ChromeDriverManager
 
 # URL of the website
-url = 'https://humanbenchmark.com/tests/number-memory'  # Replace this with the URL of the website you want to scrape
-
-service = Service(chrome_driver_path)
+url = 'https://humanbenchmark.com/tests/number-memory'
 
 # Set up the Chrome webdriver
-driver = webdriver.Chrome(None, service)
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 # Open the webpage
 driver.get(url)

@@ -4,20 +4,14 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import time
 import pyautogui
-
-
-# Define driver path
-chrome_driver_path = r"C:\Users\School account\Downloads\Other\Python things\Chrome webdriver\chromedriver-win64\chromedriver.exe"
-
-# Initialize the Chrome WebDriver
-driver = webdriver.Chrome()
-
-# URL of the website
-url = 'https://humanbenchmark.com/tests/typing'  # Replace this with the URL of the website you want to scrape
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 # Set up the Chrome webdriver
-service = Service(chrome_driver_path)
-driver = webdriver.Chrome(None, service)
+driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+
+# URL of the website
+url = 'https://humanbenchmark.com/tests/typing'
 
 # Open the webpage
 driver.get(url)
